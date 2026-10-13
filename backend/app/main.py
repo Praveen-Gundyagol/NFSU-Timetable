@@ -1,0 +1,26 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.config import APP_TITLE, APP_VERSION
+
+app = FastAPI(
+    title=APP_TITLE,
+    version=APP_VERSION,
+    description="Automated Timetable Generation Backend using Google OR-Tools CP-SAT and SQLite."
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+@app.get("/api/health")
+def health_check():
+    return {
+        "status": "healthy",
+        "app": APP_TITLE,
+        "version": APP_VERSION,
+        "solver": "Google OR-Tools CP-SAT Ready"
+    }
