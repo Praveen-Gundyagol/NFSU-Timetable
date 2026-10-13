@@ -1,7 +1,10 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Text, ForeignKey
 from sqlalchemy.orm import relationship
 from app.database import Base
+
+def utc_now():
+    return datetime.now(timezone.utc)
 
 class Timetable(Base):
     __tablename__ = "timetables"
@@ -13,8 +16,8 @@ class Timetable(Base):
     status = Column(String(20), default="DRAFT") # "DRAFT", "PUBLISHED", "ARCHIVED"
     solver_status = Column(String(30), nullable=True) # "OPTIMAL", "FEASIBLE", "INFEASIBLE"
     infeasibility_report_json = Column(Text, nullable=True) # diagnostic breakdown
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
 
     sessions = relationship("TimetableSession", back_populates="timetable", cascade="all, delete-orphan")
 

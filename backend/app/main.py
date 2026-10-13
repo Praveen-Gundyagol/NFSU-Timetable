@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import APP_TITLE, APP_VERSION
 from app.database import engine, Base
 import app.models # registers all models
-from app.routers import config, resources, academic
+from app.routers import config, resources, academic, timetable
 
 # Auto-create SQLite database tables
 Base.metadata.create_all(bind=engine)
@@ -26,6 +26,7 @@ app.add_middleware(
 app.include_router(config.router)
 app.include_router(resources.router)
 app.include_router(academic.router)
+app.include_router(timetable.router)
 
 @app.get("/api/health")
 def health_check():
